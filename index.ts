@@ -1,10 +1,13 @@
 import express, { type Express, type Request, type Response } from "express";
 import http from "http";
 import dotenv from "dotenv";
-
 dotenv.config();
 
+import * as db from "./loaders/db"
+
 const app: Express = express();
+
+app.use(express.json())
 
 // 1st connect with local postgres
 
@@ -22,9 +25,12 @@ app.get('/', (req: Request, res: Response) => {
         message: "Hi"
     })
 });
-app.post('/', (req: Request, res: Response) => {
-    const { body } = req;
-    console.log(body);
+app.post('/', async (req: Request, res: Response) => {
+    const { name } = req.body;
+    console.log(name);
+
+    const result = await db.query("INSERT INTO USERS(name); RETURNING *;", [name]);
+    console.log(result);
 
     return res.status(200).json({
         data
