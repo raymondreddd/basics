@@ -1,14 +1,18 @@
 import pg, { QueryResult } from 'pg';
+import dotenv from "dotenv";
+dotenv.config();
 
 const pool = new pg.Pool({
     user: process.env.PG_USER,
     password: process.env.PG_PASS,
     host: process.env.PG_HOST,
     port: 15628,
-    database: process.env.PG_DB
+    database: process.env.PG_DB,
+    ssl: {
+        rejectUnauthorized: true,
+        ca: process.env.PG_CERT,
+    }
 });
-
-console.log(process.env.PG_USER)
 
 // Define types for text and params
 type QueryParams = (string | number | boolean | null)[];

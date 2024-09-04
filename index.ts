@@ -1,8 +1,7 @@
-import express, { type Express, type Request, type Response } from "express";
-import http from "http";
 import dotenv from "dotenv";
 dotenv.config();
-
+import express, { type Express, type Request, type Response } from "express";
+import http from "http";
 import * as db from "./loaders/db"
 
 const app: Express = express();
@@ -27,22 +26,11 @@ app.get('/', (req: Request, res: Response) => {
 });
 app.post('/', async (req: Request, res: Response) => {
     const { name } = req.body;
-    console.log(name);
 
-    const result = await db.query("INSERT INTO USERS(name); RETURNING *;", [name]);
-    console.log(result);
+    const result = await db.query("INSERT INTO USERS(name) VALUES ($1) RETURNING *;", [name]);
 
     return res.status(200).json({
-        data
-    })
-});
-
-app.post('/', (req: Request, res: Response) => {
-    const { body } = req;
-    console.log(body);
-
-    return res.status(200).json({
-        data
+        data: result.rows ?? "NO INSERTION"
     })
 });
 

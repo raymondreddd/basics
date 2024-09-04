@@ -1,5 +1,6 @@
 .log
 .env
+ca.pem
 ./dist
 .DS_Store
 .jest-*
